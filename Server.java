@@ -3,7 +3,6 @@ import java.io.*;
 
 public class Server {
     public static void main(String[] args) throws IOException {
-
         if (args.length != 1) {
             System.err.println("Usage: java EchoServer <port number>");
             System.exit(1);
@@ -15,7 +14,6 @@ public class Server {
         one.start();
         two.start();
     }
-
     static class MyRunnable implements Runnable {
         private int port;
         public MyRunnable(int port) {
@@ -24,15 +22,15 @@ public class Server {
 
         @Override
         public void run() {
-            try (
-                    ServerSocket serverSocket =
-                            new ServerSocket(port);
-                    Socket clientSocket = serverSocket.accept();
-                    PrintWriter out =
-                            new PrintWriter(clientSocket.getOutputStream(), true);
-                    BufferedReader in = new BufferedReader(
-                            new InputStreamReader(clientSocket.getInputStream()));
-            ) {
+            PrintWriter out = null;
+            BufferedReader in = null;
+            ServerSocket serverSocket = null;
+            Socket clientSocket = null;
+            try {
+                serverSocket = new ServerSocket(port);
+                clientSocket = serverSocket.accept();
+                out = new PrintWriter(clientSocket.getOutputStream(), true);
+                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String inputLine;
                 String[] mathLine;
                 String outputLine;
@@ -63,6 +61,17 @@ public class Server {
                 System.out.println("Exception caught when trying to listen on port "
                         + port + " or listening for a connection");
                 System.out.println(e.getMessage());
+            }
+            finally {
+                try {
+                    out.close();
+                    in.close();
+                    serverSocket.close();
+                    clientSocket.close();
+                }
+                catch(Exception e) {
+                    System.out.println(e);
+                }
             }
         }
     }
