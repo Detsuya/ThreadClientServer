@@ -36,24 +36,29 @@ public class Server {
                 String outputLine;
                 while ((inputLine = in.readLine()) != null) {
                     mathLine = inputLine.split(" ");
-                    switch (mathLine[1]) {
-                        case ("+"):
-                            outputLine = Integer.toString(Integer.parseInt(mathLine[0]) + Integer.parseInt(mathLine[2]));
-                            break;
-                        case ("-"):
-                            outputLine = Integer.toString(Integer.parseInt(mathLine[0]) - Integer.parseInt(mathLine[2]));
-                            break;
-                        case ("*"):
-                            outputLine = Integer.toString(Integer.parseInt(mathLine[0]) * Integer.parseInt(mathLine[2]));
-                            break;
-                        case ("/"):
-                            if (Integer.parseInt(mathLine[2]) != 0)
-                                outputLine = Integer.toString(Integer.parseInt(mathLine[0]) / Integer.parseInt(mathLine[2]));
-                            else outputLine = "Divide by zero!";
-                            break;
-                        default:
-                            outputLine = "Operator error!";
-                            break;
+                    try {
+                        switch (mathLine[1]) {
+                            case ("+"):
+                                outputLine = Integer.toString(Integer.parseInt(mathLine[0]) + Integer.parseInt(mathLine[2]));
+                                break;
+                            case ("-"):
+                                outputLine = Integer.toString(Integer.parseInt(mathLine[0]) - Integer.parseInt(mathLine[2]));
+                                break;
+                            case ("*"):
+                                outputLine = Integer.toString(Integer.parseInt(mathLine[0]) * Integer.parseInt(mathLine[2]));
+                                break;
+                            case ("/"):
+                                if (Integer.parseInt(mathLine[2]) != 0)
+                                    outputLine = Integer.toString(Integer.parseInt(mathLine[0]) / Integer.parseInt(mathLine[2]));
+                                else outputLine = "Divide by zero!";
+                                break;
+                            default:
+                                outputLine = "Operator error!";
+                                break;
+                        }
+                    }
+                    catch (ArrayIndexOutOfBoundsException e) {
+                        outputLine = ("String error");
                     }
                     out.println(Thread.currentThread().getName() + ":" + outputLine);
                 }
